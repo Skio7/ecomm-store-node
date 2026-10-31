@@ -1,4 +1,4 @@
-# Production image. Build context = repo root:  docker build -t store-service .
+# Production image. Build context = repo root:  docker build -t ecomm-store-node .
 FROM node:22-alpine
 ENV NODE_ENV=production     PORT=4001
 WORKDIR /app

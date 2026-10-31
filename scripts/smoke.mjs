@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * End-to-end smoke test for DeployKar Shop (store-service + orders-service + MongoDB).
+ * End-to-end smoke test for DeployKar Shop (ecomm-store-node + ecomm-orders-python + MongoDB).
  * No dependencies; Node >= 22.
  *
  *   # one origin that routes /api/* to both services (e.g. the deployed frontend):
@@ -66,7 +66,7 @@ const expectStatus = (res, status, what) => expect(res.status === status, `${wha
 
 const card = (number) => ({ method: 'card', card: { number, expMonth: 12, expYear: new Date().getFullYear() + 3, cvc: '123', name: 'Smoke Test' } });
 
-console.log(`DeployKar Shop smoke test\n  store-service:  ${storeUrl}\n  orders-service: ${ordersUrl}\n`);
+console.log(`DeployKar Shop smoke test\n  ecomm-store-node:  ${storeUrl}\n  ecomm-orders-python: ${ordersUrl}\n`);
 
 console.log('Health & routing');
 for (const svc of ['auth', 'users', 'products', 'cart', 'orders', 'payments', 'notifications']) {
@@ -141,7 +141,7 @@ await step('refresh rotates tokens; reusing the old one is detected', async () =
   const again = await call('auth', '/login', { method: 'POST', body: { email, password } });
   ({ accessToken: token, refreshToken } = again.data);
 });
-await step('token from store-service is accepted by orders-service', async () => {
+await step('token from ecomm-store-node is accepted by ecomm-orders-python', async () => {
   const r = await call('orders', '', { token });
   expect(r.status === 200 && Array.isArray(r.data.data), 'orders list', r);
 });
@@ -179,7 +179,7 @@ await step('guest cart merge', async () => {
   await call('cart', `/items/${product.id}`, { method: 'PATCH', token, body: { quantity: 2 } });
 });
 
-console.log('\nCheckout & payment (orders-service → store-service)');
+console.log('\nCheckout & payment (ecomm-orders-python → ecomm-store-node)');
 let order;
 const stockBefore = (await call('products', `/${product.id}`)).data.product.stock;
 await step('checkout reserves stock and creates a pending order', async () => {
@@ -262,7 +262,7 @@ await step('order history lists both orders', async () => {
   expect(r.status === 200 && r.data.pagination.total === 2, 'history', r);
 });
 
-console.log('\nNotifications (store-service → orders-service and in-process)');
+console.log('\nNotifications (ecomm-store-node → ecomm-orders-python and in-process)');
 await step('inbox has welcome, payment failed, confirmed and cancelled', async () => {
   const r = await call('notifications', '?limit=50', { token });
   expectStatus(r, 200, 'notifications');

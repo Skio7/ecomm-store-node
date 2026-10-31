@@ -3,7 +3,7 @@ import { errors as joseErrors, jwtVerify, SignJWT } from 'jose';
 import { errors } from './errors.js';
 
 /**
- * HS256 access tokens. Both services share JWT_SECRET: store-service signs,
+ * HS256 access tokens. Both services share JWT_SECRET: ecomm-store-node signs,
  * every route in both services verifies locally (no network call per request).
  */
 export function createJwt(config) {

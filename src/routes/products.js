@@ -219,7 +219,7 @@ export function registerProductsRoutes(router, { config, db, auth, logger }) {
     },
   );
 
-  // ---- Internal (called by orders-service) ----
+  // ---- Internal (called by ecomm-orders-python) ----
   router.post('/internal/products/batch', internal, validate({ body: { ids: z.array(z.string().min(1).max(64)).max(100) } }), async (req, res) => {
     const docs = await products.find({ _id: { $in: req.valid.body.ids } }).toArray();
     res.json({ data: docs.map(toPublic) });

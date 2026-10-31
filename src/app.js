@@ -11,8 +11,8 @@ import { registerUsersRoutes } from './routes/users.js';
 import { ensureIndexes, seed } from './seed.js';
 
 /**
- * store-service: auth, users, products and cart in one process.
- * Calls orders-service for notifications; orders-service calls back into the
+ * ecomm-store-node: auth, users, products and cart in one process.
+ * Calls ecomm-orders-python for notifications; ecomm-orders-python calls back into the
  * /internal routes here for carts, addresses and stock reservations.
  */
 export async function createStoreService() {
@@ -25,7 +25,7 @@ export async function createStoreService() {
   const jwt = createJwt(config);
   const auth = createAuthMiddleware(jwt.verify);
   const orders = createServiceClient({
-    name: 'orders-service',
+    name: 'ecomm-orders-python',
     baseUrl: config.ORDERS_SERVICE_URL,
     internalKey: config.INTERNAL_API_KEY,
     timeoutMs: config.UPSTREAM_TIMEOUT_MS,
@@ -39,7 +39,7 @@ export async function createStoreService() {
     readiness: { mongodb: mongo.ping },
     dependencies: {
       mongodb: { check: mongo.ping },
-      'orders-service': { check: orders.ping, target: orders.baseUrl },
+      'ecomm-orders-python': { check: orders.ping, target: orders.baseUrl },
     },
     mounts: {
       '/api/auth': (r) => registerAuthRoutes(r, ctx),

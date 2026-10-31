@@ -1,8 +1,8 @@
 {
-  "name": "deploykar-shop-store-service",
+  "name": "ecomm-store-node",
   "version": "2.0.0",
   "private": true,
-  "description": "DeployKar Shop store-service: auth, users, products and cart (Express + MongoDB).",
+  "description": "DeployKar Shop backend 1 (Node.js): auth, users, products and cart (Express + MongoDB).",
   "type": "module",
   "main": "src/index.js",
   "engines": {

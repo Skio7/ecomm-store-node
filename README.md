@@ -1,4 +1,4 @@
-# store-service (Node.js)
+# ecomm-store-node (Node.js)
 
 One of the two backend services for **DeployKar Shop**. Node 22 + Express 5 + MongoDB.
 
@@ -9,15 +9,15 @@ One of the two backend services for **DeployKar Shop**. Node 22 + Express 5 + Mo
 | `/api/products` | catalog, search, facets, reviews, inventory, stock reservations | `products`, `categories`, `reviews`, `reservations` |
 | `/api/cart` | cart, coupons, guest-cart merge | `carts` |
 
-The other service, [orders-service](../orders-service) (Python), serves `/api/orders`, `/api/payments` and `/api/notifications`. The two talk over HTTP in both directions:
+The other service, **ecomm-orders-python** (Python), serves `/api/orders`, `/api/payments` and `/api/notifications`. The two talk over HTTP in both directions:
 
 ```
-orders-service ──► store-service   GET  /api/cart/internal/carts/:userId           (checkout)
+ecomm-orders-python ──► ecomm-store-node   GET  /api/cart/internal/carts/:userId           (checkout)
                                    GET  /api/users/internal/users/:id/addresses/:a
                                    POST /api/products/internal/reservations         (reserve stock)
                                    POST /api/products/internal/reservations/:id/commit|release
                                    DELETE /api/cart/internal/carts/:userId          (after payment)
-store-service  ──► orders-service  POST /api/notifications/internal/notifications   (welcome, password changed)
+ecomm-store-node  ──► ecomm-orders-python  POST /api/notifications/internal/notifications   (welcome, password changed)
 ```
 
 `/internal/*` routes require the `x-internal-key` header (`INTERNAL_API_KEY`).
@@ -45,9 +45,9 @@ Demo accounts: `jane@shop.test` / `Customer@123`, `rahul@shop.test` / `Customer@
 | Env var | Required in production | Notes |
 |---|---|---|
 | `MONGODB_URI` | yes | set by `connect_database`; `DATABASE_URL` also accepted |
-| `JWT_SECRET` | yes, ≥32 chars | **same value** as orders-service |
-| `INTERNAL_API_KEY` | yes, ≥32 chars | **same value** as orders-service |
-| `ORDERS_SERVICE_URL` | yes | orders-service origin, e.g. `https://orders-xyz.deploykar.app` |
+| `JWT_SECRET` | yes, ≥32 chars | **same value** as ecomm-orders-python |
+| `INTERNAL_API_KEY` | yes, ≥32 chars | **same value** as ecomm-orders-python |
+| `ORDERS_SERVICE_URL` | yes | ecomm-orders-python origin, e.g. `https://orders-xyz.deploykar.app` |
 | `SEED_ADMIN_PASSWORD` | no | creates `admin@shop.test` |
 | `CORS_ORIGINS` | no | only if the browser calls this service on another origin |
 | `MONGODB_DB` | no | database name (default: from the URI, else `deploykar_shop`) |

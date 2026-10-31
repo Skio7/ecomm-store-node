@@ -132,7 +132,7 @@ export function registerCartRoutes(router, { config, db, auth, catalog }) {
     },
   );
 
-  // ---- Internal (called by orders-service at checkout / after payment) ----
+  // ---- Internal (called by ecomm-orders-python at checkout / after payment) ----
   const internal = requireInternal(config.INTERNAL_API_KEY);
   router.get('/internal/carts/:userId', internal, async (req, res) => {
     res.json({ userId: req.params.userId, items: await getItems(req.params.userId) });

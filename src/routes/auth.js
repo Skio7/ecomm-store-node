@@ -113,7 +113,7 @@ export function registerAuthRoutes(router, { config, db, jwt, auth, orders, logg
   const requestMeta = (req) => ({ ip: req.ip, userAgent: req.get('user-agent') });
   const sessionResponse = (user, { refreshTokenId: _omit, ...session }) => ({ user: publicUser(user), ...session });
 
-  // Cross-service call: notifications live in orders-service. Best-effort — auth never fails because of it.
+  // Cross-service call: notifications live in ecomm-orders-python. Best-effort — auth never fails because of it.
   const notify = (user, type) =>
     orders
       .post('/api/notifications/internal/notifications', { userId: user._id, email: user.email, type, data: { name: user.name } }, { retry: true })

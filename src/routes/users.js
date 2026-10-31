@@ -125,7 +125,7 @@ export function registerUsersRoutes(router, { config, db, auth }) {
     res.status(204).end();
   });
 
-  // ---- Internal (called by orders-service at checkout) ----
+  // ---- Internal (called by ecomm-orders-python at checkout) ----
   router.get(
     '/internal/users/:userId/addresses/:addressId',
     requireInternal(config.INTERNAL_API_KEY),
